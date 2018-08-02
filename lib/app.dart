@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'pages/home.dart';
 
 class TimeTracker extends StatelessWidget {
   @override
@@ -8,13 +9,7 @@ class TimeTracker extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.white,
       ),
-      home: Scaffold(
-        body: Container(
-          child: Center(
-            child: Text('Time Tracker'),
-          ),
-        ),
-      ),
+      home: HomePage(),
     );
   }
 }
