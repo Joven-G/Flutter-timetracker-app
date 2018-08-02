@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_time_tracker/widgets/cards.dart';
 import 'package:flutter_time_tracker/widgets/buttons.dart';
 import 'package:flutter_time_tracker/widgets/backgrounds.dart';
+import 'package:flutter_time_tracker/widgets/generics.dart';
 
 class HomePage extends StatefulWidget {
 
@@ -11,9 +12,6 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  Widget get _spacer {
-    return SizedBox(height: 16.0);
-  }
 
   Timer _timer;
   int _currentTimerValue = 0;
@@ -46,31 +44,18 @@ class HomePageState extends State<HomePage> {
           PageBackground(backColor: Colors.grey[200], foreColor: Colors.green[300]),
           ListView(
             children: <Widget>[
-              _spacer,
+              ASpacer(),
               TimeWidget(currentTimerValue: _currentTimerValue),
-              _spacer,
+              ASpacer(),
               GraphCard(),
-              _spacer,
+              ASpacer(),
               WeekView(),
-              _spacer,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  AButton(
-                    isRaised: true,
-                    label: "TIME IN",
-                    onPressed: null == _timer || !_timer.isActive ? () {
-                      _startTimer();
-                    } : null,
-                  ),
-                  AButton(
-                    isRaised: false,
-                    label: "TIME OUT",
-                    onPressed: null != _timer && _timer.isActive ? () {
-                      _stopTimer();
-                    } : null,
-                  ),
-                ],
+              ASpacer(),
+              TimerControl(
+                startHandler: null == _timer || !_timer.isActive ?
+                  () => _startTimer() : null,
+                stopHandler: null != _timer && _timer.isActive ?
+                  () => _stopTimer() : null,
               ),
             ],
           ),
@@ -80,9 +65,36 @@ class HomePageState extends State<HomePage> {
   }
 }
 
-class TimeWidget extends StatelessWidget {
-  const TimeWidget({ this.currentTimerValue });
+class TimerControl extends StatelessWidget {
+  // Ensure at least one of the handlers is always set
+  TimerControl({ this.startHandler, this.stopHandler }) :
+    assert(null != startHandler || null != stopHandler);
 
+  final Function startHandler;
+  final Function stopHandler;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        null != startHandler ?
+        AButton(
+          label: "CHECK IN",
+          onPressed: startHandler,
+        ) :
+        AButton(
+          isRaised: false,
+          label: "STOP TIMER",
+          onPressed: stopHandler,
+        ),
+      ],
+    );
+  }
+}
+
+class TimeWidget extends StatelessWidget {
+  const TimeWidget({ this.currentTimerValue = 0 });
   final currentTimerValue;
 
   String _elapsedTime() {
@@ -131,7 +143,7 @@ class ChartColumn extends StatelessWidget {
     return Column(
       children: <Widget>[
         Text(label),
-        SizedBox(height: 8.0),
+        ASpacer(height: 8.0),
         Stack(
           children: <Widget>[
             _well,
@@ -139,7 +151,7 @@ class ChartColumn extends StatelessWidget {
           ],
           alignment: AlignmentDirectional.bottomStart
         ),
-        SizedBox(height: 8.0),
+        ASpacer(height: 8.0),
         Text((height * 100).toString()),
       ],
     );
@@ -216,7 +228,7 @@ class WeekView extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: 16.0),
+        ASpacer(height: 16.0),
         Container(
           height: 160.0,
           child: ListView(
