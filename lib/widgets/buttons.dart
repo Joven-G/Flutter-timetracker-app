@@ -20,5 +20,3 @@ class AButton extends StatelessWidget {
       FlatButton( child: buttonChild, onPressed: onPressed );
   }
 }
-
-
