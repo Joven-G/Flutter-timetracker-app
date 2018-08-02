@@ -13,11 +13,13 @@ void main() {
   }
 
   testWidgets('AButton returns a flat button when requested', (WidgetTester tester) async {
-    Widget flatButton = wrapButton(AButton(
-          isRaised: false,
-          label: buttonLabel,
-          onPressed: fixedCallback
-      ));
+    Widget flatButton = wrapButton(
+      AButton(
+        isRaised: false,
+        label: buttonLabel,
+        onPressed: fixedCallback
+      )
+    );
     
     await tester.pumpWidget(flatButton);
     
@@ -31,11 +33,13 @@ void main() {
   });
 
   testWidgets('AButton returns a raised button when requested', (WidgetTester tester) async {
-    Widget raisedButton = wrapButton(AButton(
-          isRaised: true,
-          label: buttonLabel,
-          onPressed: fixedCallback
-      ));
+    Widget raisedButton = wrapButton(
+      AButton(
+        isRaised: true,
+        label: buttonLabel,
+        onPressed: fixedCallback
+      )
+    );
 
     await tester.pumpWidget(raisedButton);
 
