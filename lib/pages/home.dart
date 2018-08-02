@@ -1,10 +1,40 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:flutter_time_tracker/widgets/cards.dart';
 import 'package:flutter_time_tracker/widgets/buttons.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+
+  @override
+  HomePageState createState() => HomePageState();
+}
+
+class HomePageState extends State<HomePage> {
   Widget get _spacer {
     return SizedBox(height: 16.0);
+  }
+
+  Timer _timer;
+  int _currentTimerValue = 0;
+
+  _startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), _handleTimerCallback);
+  }
+
+  _stopTimer() {
+    if (_timer.isActive) {
+      _timer.cancel();
+      print("Timer cancelled with $_currentTimerValue seconds elapsed");
+      setState(() {
+        _currentTimerValue = 0;
+      });
+    }
+  }
+
+  _handleTimerCallback(Timer _timer) {
+    setState(() {
+      _currentTimerValue += 1;
+    });
   }
 
   @override
@@ -14,18 +44,7 @@ class HomePage extends StatelessWidget {
         child: ListView(
           children: <Widget>[
             _spacer,
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 36.0),
-              child: Center(
-                child: Text(
-                  '00:00:00',
-                  style: TextStyle(
-                    fontSize: 36.0,
-                    fontFamily: 'Calculator'
-                  )
-                ),
-              ),
-            ),
+            TimeWidget(currentTimerValue: _currentTimerValue),
             _spacer,
             GraphCard(),
             _spacer,
@@ -37,22 +56,59 @@ class HomePage extends StatelessWidget {
                 AButton(
                   isRaised: true,
                   label: "TIME IN",
-                  onPressed: () {
-                    print("Time In...");
-                  },
+                  onPressed: null == _timer || !_timer.isActive ? () {
+                    _startTimer();
+                  } : null,
                 ),
                 AButton(
                   isRaised: false,
                   label: "TIME OUT",
-                  onPressed: () {
-                    print("Time Out");
-                  },
+                  onPressed: null != _timer && _timer.isActive ? () {
+                    _stopTimer();
+                  } : null,
                 ),
               ],
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class TimeWidget extends StatelessWidget {
+  const TimeWidget({ this.currentTimerValue });
+
+  final currentTimerValue;
+
+  String _elapsedTime() {
+    if (0 == currentTimerValue) {
+      return '00:00:00';
+    }
+
+    final double hours = currentTimerValue / 3600;
+    final double minutes = (currentTimerValue / 60) % 60;
+    final seconds = currentTimerValue % 60;
+
+    return hours.floor().toString().padLeft(2, '0') + ':' +
+      minutes.floor().toString().padLeft(2, '0') + ':' +
+      seconds.toString().padLeft(2, '0');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 36.0),
+      width: MediaQuery.of(context).size.width * .8,
+      child: Center(
+        child: Text(
+          _elapsedTime(),
+          style: TextStyle(
+            fontSize: 48.0,
+            fontFamily: 'Calculator'
+          )
+        ),
+      )
     );
   }
 }
