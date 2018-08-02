@@ -5,14 +5,14 @@ import 'package:flutter_time_tracker/widgets/buttons.dart';
 import 'package:flutter_time_tracker/widgets/backgrounds.dart';
 import 'package:flutter_time_tracker/widgets/generics.dart';
 
-class HomePage extends StatefulWidget {
+const double SIDE_PADDING = 24.0;
 
+class HomePage extends StatefulWidget {
   @override
   HomePageState createState() => HomePageState();
 }
 
 class HomePageState extends State<HomePage> {
-
   Timer _timer;
   int _currentTimerValue = 0;
 
@@ -20,14 +20,18 @@ class HomePageState extends State<HomePage> {
     _timer = Timer.periodic(Duration(seconds: 1), _handleTimerCallback);
   }
 
-  _stopTimer() {
+  _clearTimer() {
     if (_timer.isActive) {
       _timer.cancel();
-      print("Timer cancelled with $_currentTimerValue seconds elapsed");
-      setState(() {
-        _currentTimerValue = 0;
-      });
     }
+  }
+
+  _stopTimer() {
+    _clearTimer();
+
+    setState(() {
+      _currentTimerValue = 0;
+    });
   }
 
   _handleTimerCallback(Timer _timer) {
@@ -41,7 +45,10 @@ class HomePageState extends State<HomePage> {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          PageBackground(backColor: Colors.grey[200], foreColor: Colors.green[300]),
+          PageBackground(
+            backColor: Colors.grey[200],
+            foreColor: Theme.of(context).primaryColor,
+          ),
           ListView(
             children: <Widget>[
               ASpacer(),
@@ -62,6 +69,12 @@ class HomePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _clearTimer();
+    super.dispose();
   }
 }
 
@@ -114,7 +127,7 @@ class TimeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 36.0),
+      margin: const EdgeInsets.symmetric(horizontal: SIDE_PADDING * 1.5),
       width: MediaQuery.of(context).size.width * .8,
       child: Center(
         child: Text(
@@ -135,8 +148,8 @@ class ChartColumn extends StatelessWidget {
 
   final String label;
   final double height;
-  final _wellHeight = 128.0;
-  final _barWidth = 16.0;
+  final _wellHeight = SIDE_PADDING * 5.25;
+  final _barWidth = SIDE_PADDING / 1.5;
 
   @override
   Widget build(BuildContext context) {
@@ -147,19 +160,19 @@ class ChartColumn extends StatelessWidget {
         Stack(
           children: <Widget>[
             _well,
-            buildChartSpine(height)
+            buildChartSpine(height, context)
           ],
           alignment: AlignmentDirectional.bottomStart
         ),
-        ASpacer(height: 8.0),
+        ASpacer(height: SIDE_PADDING / 3),
         Text((height * 100).toString()),
       ],
     );
   }
 
-  Widget buildChartSpine(double height) {
+  Widget buildChartSpine(double height, BuildContext context) {
     return Container(
-      decoration: BoxDecoration(color: Colors.green[400]),
+      decoration: BoxDecoration(color: Theme.of(context).primaryColor),
       height: _wellHeight * height,
       width: _barWidth,
     );
@@ -180,11 +193,11 @@ class GraphCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 24.0),
+      margin: const EdgeInsets.symmetric(horizontal: SIDE_PADDING),
       child: ACard(
         color: Colors.white,
         child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 12.0),
+          margin: const EdgeInsets.all(SIDE_PADDING * .5),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -210,7 +223,7 @@ class WeekView extends StatelessWidget {
     return Column(
       children: <Widget>[
         Container(
-          margin: const EdgeInsets.symmetric(horizontal: 24.0),
+          margin: const EdgeInsets.symmetric(horizontal: SIDE_PADDING),
           child: Row(
             children: <Widget>[
               Expanded(
@@ -246,12 +259,12 @@ class WeekView extends StatelessWidget {
     for (int i = 0; i < count; i++) {
       cardList.add(
           Container(
-            margin: const EdgeInsets.only(bottom: 8.0),
+            margin: const EdgeInsets.only(bottom: SIDE_PADDING / 3),
             width: 200.0,
             child: ATapCard(
               onTap: () => print('Card $i tapped!'),
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(SIDE_PADDING / 1.5),
                 child: Text(i.toString()),
               ),
             ),
