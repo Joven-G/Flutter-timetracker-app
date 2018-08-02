@@ -17,7 +17,13 @@ class HomePage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 36.0),
               child: Center(
-                child: Text('00:00:00', style: TextStyle(fontSize: 36.0)),
+                child: Text(
+                  '00:00:00',
+                  style: TextStyle(
+                    fontSize: 36.0,
+                    fontFamily: 'Calculator'
+                  )
+                ),
               ),
             ),
             _spacer,

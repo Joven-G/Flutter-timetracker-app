@@ -8,6 +8,7 @@ class TimeTracker extends StatelessWidget {
       title: 'Time Tracker (lite)',
       theme: ThemeData(
         primaryColor: Colors.white,
+        fontFamily: 'Lato'
       ),
       home: HomePage(),
     );
