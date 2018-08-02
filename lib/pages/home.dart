@@ -27,11 +27,14 @@ class HomePage extends StatelessWidget {
                   Expanded(
                     child: Text('Recent Weeks', style: textTheme.title),
                   ),
-                  Row(
-                    children: <Widget>[
-                      Text('Browse List'),
-                      Icon(Icons.arrow_forward)
-                    ],
+                  InkWell(
+                    onTap: () => print('Browse List...'),
+                    child: Row(
+                      children: <Widget>[
+                        Text('Browse List'),
+                        Icon(Icons.arrow_forward)
+                      ],
+                    ),
                   )
                 ],
               ),
@@ -77,7 +80,8 @@ class HomePage extends StatelessWidget {
       cardList.add(
         Container(
           width: 200.0,
-          child: ACard(
+          child: ATapCard(
+            onTap: () => print('Card $i tapped!'),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(i.toString()),
