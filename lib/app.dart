@@ -7,7 +7,7 @@ class TimeTracker extends StatelessWidget {
     return MaterialApp(
       title: 'Time Tracker (lite)',
       theme: ThemeData(
-        primaryColor: Colors.white,
+        primarySwatch: Colors.green,
         fontFamily: 'Lato'
       ),
       home: HomePage(),

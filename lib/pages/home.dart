@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_time_tracker/widgets/cards.dart';
 import 'package:flutter_time_tracker/widgets/buttons.dart';
+import 'package:flutter_time_tracker/widgets/backgrounds.dart';
 
 class HomePage extends StatefulWidget {
 
@@ -40,37 +41,40 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: ListView(
-          children: <Widget>[
-            _spacer,
-            TimeWidget(currentTimerValue: _currentTimerValue),
-            _spacer,
-            GraphCard(),
-            _spacer,
-            WeekView(),
-            _spacer,
-            ButtonBar(
-              alignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                AButton(
-                  isRaised: true,
-                  label: "TIME IN",
-                  onPressed: null == _timer || !_timer.isActive ? () {
-                    _startTimer();
-                  } : null,
-                ),
-                AButton(
-                  isRaised: false,
-                  label: "TIME OUT",
-                  onPressed: null != _timer && _timer.isActive ? () {
-                    _stopTimer();
-                  } : null,
-                ),
-              ],
-            ),
-          ],
-        ),
+      body: Stack(
+        children: <Widget>[
+          PageBackground(backColor: Colors.grey[200], foreColor: Colors.green[300]),
+          ListView(
+            children: <Widget>[
+              _spacer,
+              TimeWidget(currentTimerValue: _currentTimerValue),
+              _spacer,
+              GraphCard(),
+              _spacer,
+              WeekView(),
+              _spacer,
+              ButtonBar(
+                alignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  AButton(
+                    isRaised: true,
+                    label: "TIME IN",
+                    onPressed: null == _timer || !_timer.isActive ? () {
+                      _startTimer();
+                    } : null,
+                  ),
+                  AButton(
+                    isRaised: false,
+                    label: "TIME OUT",
+                    onPressed: null != _timer && _timer.isActive ? () {
+                      _stopTimer();
+                    } : null,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -104,8 +108,9 @@ class TimeWidget extends StatelessWidget {
         child: Text(
           _elapsedTime(),
           style: TextStyle(
-            fontSize: 48.0,
-            fontFamily: 'Calculator'
+            fontSize: 64.0,
+            fontFamily: 'Calculator',
+            color: Colors.white
           )
         ),
       )

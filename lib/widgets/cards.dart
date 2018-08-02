@@ -20,16 +20,18 @@ class ATapCard extends StatelessWidget {
 }
 
 class ACard extends StatelessWidget {
-  ACard({ this.child, this.color });
+  ACard({ this.child, this.color = Colors.white, this.elevation = 4.0 });
 
   final Widget child;
   final Color color;
+  final double elevation;
 
   @override
   Widget build(BuildContext context) {
     return Card(
       color: color,
       child: child,
+      elevation: elevation,
     );
   }
 }

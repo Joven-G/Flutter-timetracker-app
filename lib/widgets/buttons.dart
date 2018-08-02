@@ -16,7 +16,13 @@ class AButton extends StatelessWidget {
     final buttonChild = Text(label);
 
     return isRaised ?
-      RaisedButton( child: buttonChild, onPressed: onPressed ) :
+      RaisedButton(
+        child: buttonChild,
+        onPressed: onPressed,
+        color: Theme.of(context).primaryColor,
+        textColor: Colors.white,
+        splashColor: Colors.grey,
+      ) :
       FlatButton( child: buttonChild, onPressed: onPressed );
   }
 }
