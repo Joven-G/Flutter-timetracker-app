@@ -3,51 +3,28 @@ import 'package:flutter_time_tracker/widgets/cards.dart';
 import 'package:flutter_time_tracker/widgets/buttons.dart';
 
 class HomePage extends StatelessWidget {
+  Widget get _spacer {
+    return SizedBox(height: 16.0);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       body: Container(
         child: ListView(
           children: <Widget>[
-            SizedBox(height: 18.0),
+            _spacer,
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 36.0),
               child: Center(
                 child: Text('00:00:00', style: TextStyle(fontSize: 36.0)),
               ),
             ),
-            SizedBox(height: 16.0),
+            _spacer,
             GraphCard(),
-            SizedBox(height: 16.0),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Text('Recent Weeks', style: textTheme.title),
-                  ),
-                  InkWell(
-                    onTap: () => print('Browse List...'),
-                    child: Row(
-                      children: <Widget>[
-                        Text('Browse List'),
-                        Icon(Icons.arrow_forward)
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-            SizedBox(height: 16.0),
-            Container(
-              height: 160.0,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: _buildCards(5),
-              ),
-            ),
-            SizedBox(height: 16.0),
+            _spacer,
+            WeekView(),
+            _spacer,
             ButtonBar(
               alignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -71,27 +48,6 @@ class HomePage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  List<Widget> _buildCards (int count) {
-    final cardList = <Widget>[];
-
-    for (int i = 0; i < count; i++) {
-      cardList.add(
-        Container(
-          width: 200.0,
-          child: ATapCard(
-            onTap: () => print('Card $i tapped!'),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(i.toString()),
-            ),
-          ),
-        )
-      );
-    }
-
-    return cardList.toList();
   }
 }
 
@@ -154,7 +110,6 @@ class GraphCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              // TODO: Add Bars
               ChartColumn(label: 'MON', height: .8),
               ChartColumn(label: 'TUE', height: .65),
               ChartColumn(label: 'WED', height: .86),
@@ -165,5 +120,65 @@ class GraphCard extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class WeekView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return Column(
+      children: <Widget>[
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: Text('Recent Weeks', style: textTheme.title),
+              ),
+              InkWell(
+                onTap: () => print('Browse List...'),
+                child: Row(
+                  children: <Widget>[
+                    Text('Browse List'),
+                    Icon(Icons.arrow_forward)
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+        SizedBox(height: 16.0),
+        Container(
+          height: 160.0,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: _buildCards(5),
+          ),
+        ),
+      ],
+    );
+  }
+
+  List<Widget> _buildCards (int count) {
+    final cardList = <Widget>[];
+
+    for (int i = 0; i < count; i++) {
+      cardList.add(
+          Container(
+            width: 200.0,
+            child: ATapCard(
+              onTap: () => print('Card $i tapped!'),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(i.toString()),
+              ),
+            ),
+          )
+      );
+    }
+
+    return cardList.toList();
   }
 }
