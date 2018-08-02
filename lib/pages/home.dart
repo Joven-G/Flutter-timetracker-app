@@ -53,8 +53,8 @@ class HomePageState extends State<HomePage> {
               _spacer,
               WeekView(),
               _spacer,
-              ButtonBar(
-                alignment: MainAxisAlignment.spaceEvenly,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   AButton(
                     isRaised: true,
@@ -234,6 +234,7 @@ class WeekView extends StatelessWidget {
     for (int i = 0; i < count; i++) {
       cardList.add(
           Container(
+            margin: const EdgeInsets.only(bottom: 8.0),
             width: 200.0,
             child: ATapCard(
               onTap: () => print('Card $i tapped!'),
