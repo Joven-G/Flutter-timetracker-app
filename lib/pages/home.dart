@@ -84,7 +84,10 @@ class HomePageState extends State<HomePage> {
     final theList = prefs.getString(TIME_RECORDINGS_KEY) ?? '';
 
     var jsonList = json.decode(theList) as List;
-    return jsonList.map((entry) => CheckIn.fromJson(entry)).toList();
+    jsonList = jsonList.map((entry) => CheckIn.fromJson(entry)).toList();
+    jsonList.retainWhere((i) => i.day != null);
+
+    return jsonList.sublist(0, 5);
   }
 
   @override
@@ -213,9 +216,11 @@ class ChartColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final labelStyle = TextStyle(color: Colors.grey);
+
     return Column(
       children: <Widget>[
-        Text(label),
+        Text(label, style: labelStyle,),
         ASpacer(height: 8.0),
         Stack(
           children: <Widget>[
@@ -225,7 +230,7 @@ class ChartColumn extends StatelessWidget {
           alignment: AlignmentDirectional.bottomStart
         ),
         ASpacer(height: SIDE_PADDING / 3),
-        Text((height * 100).toStringAsFixed(2)),
+        Text((height * 100).toStringAsFixed(2), style: labelStyle,),
       ],
     );
   }
@@ -253,14 +258,22 @@ class GraphCard extends StatelessWidget {
   GraphCard(this.checkIns);
   final List<CheckIn> checkIns;
 
+  final List weekDay = const ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
   getChartColumns() {
     if (this.checkIns.isEmpty) {
       return <ChartColumn>[];
     }
 
     return this.checkIns.map((CheckIn checkIn) {
+      var label;
+      if (checkIn.day == null)
+        label = 'UNK';
+      else
+        label = weekDay[checkIn.day.weekday -1];
+
       return ChartColumn(
-        label: checkIn.day?.day?.toString() ?? 'DEF',
+        label: label,
         height: (checkIn.elapsed ?? (EXPECTED_TIME_FRAME / 2)) / EXPECTED_TIME_FRAME,
       );
     }).toList();
